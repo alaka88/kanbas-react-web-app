@@ -261,7 +261,7 @@ tag to tell browsers to render the gaps.
                <a href="https://www.lipsum.com">click here</a>
                to get dummy text<br/>
                Please
-               <a href="https://github.com/alaka88">click here</a>
+               <a href="https://github.com/alaka88/kanbas-react-web-app">click here</a>
                to GitHub<br/>
         </div>
     );

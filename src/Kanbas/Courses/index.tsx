@@ -25,9 +25,11 @@ export default function Courses() {
                      element={<h2>Assignments</h2>} />
               <Route path="Assignments/:id"
                      element={<h2>Assignment Editor</h2>} />
+              
             </Routes>
           </td>
         </tr>
       </table>
     </div>
+    
 );}

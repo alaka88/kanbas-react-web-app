@@ -17,8 +17,84 @@ export default function Dashboard() {
               <a href="#/Kanbas/Courses/1234/Home"> Go </a>
             </div>
           </div>
-          <div className="wd-dashboard-course"> ... </div>
-          <div className="wd-dashboard-course"> ... </div>
+          <div className="wd-dashboard-course">
+          <img src="/images/5001.jpg" width={200} />
+          <div>
+            <a className="wd-dashboard-course-link"
+              href="#/Kanbas/Courses/5001/Home">
+              CS5001
+            </a>
+            <p className="wd-dashboard-course-title">
+              Intencive Fundation of Computer Science
+            </p>
+            <a href="#/Kanbas/Courses/5001/Home"> Go </a>
+          </div>
+        </div>
+        <div className="wd-dashboard-course">
+          <img src="/images/5002.jpg" width={200} />
+          <div>
+            <a className="wd-dashboard-course-link"
+              href="#/Kanbas/Courses/5002/Home">
+              CS5002
+            </a>
+            <p className="wd-dashboard-course-title">
+              Discrete Structure
+            </p>
+            <a href="#/Kanbas/Courses/5002/Home"> Go </a>
+          </div>
+        </div>
+        <div className="wd-dashboard-course">
+          <img src="/images/5004.jpg" width={200} />
+          <div>
+            <a className="wd-dashboard-course-link"
+              href="#/Kanbas/Courses/5004/Home">
+              CS5004
+            </a>
+            <p className="wd-dashboard-course-title">
+              Object-Oriented Design
+            </p>
+            <a href="#/Kanbas/Courses/5004/Home"> Go </a>
+          </div>
+        </div>
+        <div className="wd-dashboard-course">
+          <img src="/images/5008.jpg" width={200} />
+          <div>
+            <a className="wd-dashboard-course-link"
+              href="#/Kanbas/Courses/5008/Home">
+              CS5008
+            </a>
+            <p className="wd-dashboard-course-title">
+              Data Structure and Algorithms
+            </p>
+            <a href="#/Kanbas/Courses/5008/Home"> Go </a>
+          </div>
+        </div>
+        <div className="wd-dashboard-course">
+          <img src="/images/5520.jpg" width={200} />
+          <div>
+            <a className="wd-dashboard-course-link"
+              href="#/Kanbas/Courses/5520/Home">
+              CS5520
+            </a>
+            <p className="wd-dashboard-course-title">
+              Mobile Application Development
+            </p>
+            <a href="#/Kanbas/Courses/5520/Home"> Go </a>
+          </div>
+        </div>
+        <div className="wd-dashboard-course">
+          <img src="/images/5330.jpg" width={200} />
+          <div>
+            <a className="wd-dashboard-course-link"
+              href="#/Kanbas/Courses/5002/Home">
+              CS5330
+            </a>
+            <p className="wd-dashboard-course-title">
+              Pattern Recogonition and Computer Vision
+            </p>
+            <a href="#/Kanbas/Courses/5330/Home"> Go </a>
+          </div>
+        </div>
         </div>
       </div>
   );}
