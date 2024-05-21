@@ -95,7 +95,7 @@ export default function Dashboard() {
               CS5520
             </a>
             <p className="wd-dashboard-course-title card-text">
-              Mobile Application Dev Summer 1 2024 
+              Mobile Application Development Summer 1 2024 
             </p>
             <a href="#/Kanbas/Courses/5520/Home" className="btn btn-primary"> Go </a>
           </div>
@@ -111,7 +111,7 @@ export default function Dashboard() {
               CS5330
             </a>
             <p className="wd-dashboard-course-title card-text">
-              Pattern Recogonition and CV Summer 1 2024 
+              Pattern Recognition and Computer Vision Summer 1 2024 
             </p>
             <a href="#/Kanbas/Courses/5330/Home" className="btn btn-primary"> Go </a>
           </div>
