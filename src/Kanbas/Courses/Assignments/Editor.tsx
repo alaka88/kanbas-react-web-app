@@ -1,28 +1,23 @@
 import { BsX } from 'react-icons/bs';
+import { Link, useLocation, useParams } from 'react-router-dom';
+import { assignments } from '../../Database';
 export default function AssignmentEditor() {
+  const {cid} = useParams();
+  const {pathname} = useLocation();
+  const aid = pathname.split("/").pop();
+  const assignment = assignments.find(a => a._id === aid);
+ 
     return (
       <div className="container">
       <div id="wd-assignments-editor">
           <div className="row input-group mb-3">
             <label htmlFor="wd-name" className="form-label">Assignment Name</label>
-            <input type="text" className="form-control" id="wd-name" value="A1"/>
+            <input type="text" className="form-control" id="wd-name" value={assignment?.title} readOnly/>
           </div>
 
           <div className="row input-group mb-3">
-              <textarea className="form-control" id="wd-description" style={{ width: '100%', height: '300px' }} value={`
-              The assignment is available online
-
-              Submit a link to the landing page of your Web application running on Netlify.
-
-              The landing page should include the following:
-
-              - Your full name and section 
-              - Links to each of the lab assignments 
-              - Link to the Kanbas application
-              - Links to all relevant source code repositories
-
-              The Kanbas application should include a link to navigate back to the landing page.
-              `}></textarea>
+              <textarea className="form-control" id="wd-description" 
+              style={{ width: '100%', height: '300px' }} value={assignment?.description}></textarea>
           </div>        
         
         <div className="row mb-2">
@@ -30,7 +25,7 @@ export default function AssignmentEditor() {
                 <label htmlFor="wd-points" className="col-form-label float-end">Points</label>
             </div>
             <div className="col">
-                <input id="wd-points" type="number" className="form-control" value={100}/>
+                <input id="wd-points" type="number" className="form-control" value={assignment?.points}/>
             </div>
         </div>
         
@@ -120,27 +115,25 @@ export default function AssignmentEditor() {
                  <button className="btn btn-light" style={{padding:'5px 10px'}}>
                     Everyone <BsX className="me-1" /></button>
                     <input id="wd-assign-to" type="text" 
-                      className="form-control"/> 
-
-                  </div>
+                      className="form-control"/> </div>
               </div>
               <div className="row mb-3">
                  <label htmlFor="wd-due-date"><b>Due</b></label>
                  <input type="date"
                      id="wd-due-date"
                      className="form-control"
-                     value="2024-05-13" />
+                     value={assignment?.due} />
               </div>
               <div className="row mb-3">
                 <div className="col">
                   <label htmlFor="wd-available-from"><b>Available from</b></label>
                   <input type="date" id="wd-available-from" 
-                       className="form-control" value="2024-05-06" /> 
+                       className="form-control" value={assignment?.available} /> 
                 </div>
                 <div className="col">
                   <label htmlFor="wd-available-until"><b>Until</b></label>
                   <input type="date" id="wd-available-until" 
-                    className="form-control" value="2024-05-20" />
+                    className="form-control" value={assignment?.until} />
                 </div>
               </div>
             </div>
@@ -152,13 +145,12 @@ export default function AssignmentEditor() {
       </div>
 
       <div className="mb-2">
-          <input type="button" className="btn btn-danger float-end ms-2" value="Save"/>
-          <input type="button" className="btn btn-secondary float-end" value="Cancel"/>
+          <Link key={'save'} to={`/Kanbas/Courses/${cid}/Assignments`} className="btn btn-danger float-end ms-2">Save</Link>
+          <Link key={'cancel'} to={`/Kanbas/Courses/${cid}/Assignments`} className="btn btn-secondary float-end">Cancel</Link>
+        </div>
+
+        <div className="row" style={{ height: '30px', width: '100%' }}></div>
       </div>
-      <div className="row" style={{height:'30px',width:'100%'}}></div>
-      </div>
-      </div>
-      
-   
-    );
-  }
+    </div>
+  );
+}

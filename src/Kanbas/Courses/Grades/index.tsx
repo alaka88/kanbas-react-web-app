@@ -1,8 +1,26 @@
 import { BsFunnel } from "react-icons/bs";
 import { FaSearch } from "react-icons/fa";
+import { useParams } from "react-router-dom";
+import { assignments, enrollments, grades, users } from "../../Database";
 import GradesControls from "./GradesControls";
 
 export default function Grades(){
+    const { cid } = useParams();
+    const filteredEnrollments = enrollments.filter(enrollment => enrollment.course === cid);
+    const students = filteredEnrollments.map(enrollment => {
+        const student = users.find(user => user._id === enrollment.user); 
+        return student ? { ...student, grades: [] } : null;
+    }).filter(Boolean);
+    const assignmentsList = assignments.filter(assignment => assignment.course === cid);
+    const gradesList = students.map(student => { 
+        const studentGrades = assignmentsList.map(assignment => {
+            const grade = grades.find(g => g.student === student!._id && g.assignment === assignment._id);
+            return grade ? grade.grade : 'N/A'; 
+        });
+        return { ...student, grades: studentGrades }; 
+    });
+    const showAssignments = assignmentsList.length > 0;
+
     return(
        <div id="wd-grades">
         <GradesControls /><br /><br /><br />
@@ -19,7 +37,7 @@ export default function Grades(){
             <select className="form-control ps-5 ">
                 <option selected>Search Students</option>
             </select>
-            </div>
+          </div>
          </div>
         <div className="col">
           <label htmlFor="wd-assignments-name">
@@ -28,92 +46,47 @@ export default function Grades(){
             <FaSearch 
                 className="position-absolute" 
                 style={{ left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#ccc', fontSize: '16px' }} 
-                />
-            <select className="form-control ps-5">
+            />
+             <select className="form-control ps-5">
              <option selected>Search Assignmnets</option>
             </select>
            </div>
-           </div>
+          </div>
         </div>
       </div>
     </div>
-    <button id="wd-import-btn" className="btn btn-lg btn-secondary mt-3"
-          type="button">
+    <button id="wd-import-btn" className="btn btn-lg btn-secondary mt-3" type="button">
           <BsFunnel className="me-2" style={{ fontSize: '1.5rem' }} />
           Apply Filters
         </button>
-       
+      
         <div className="row my-3">
-        <div id="wd-grades-tables">
-          <div className="table-responsive">
-            <table className="table table-striped table-bordered mt-2">
-                <thead>
-                <tr className="table-secondary text-center">
-                    <th style={{ verticalAlign: 'middle' }}>Student Name</th>
-                    <th>
-                        <div>A1 SETUP</div>
-                        <div style={{ fontWeight: 'normal' }}>Out of 100</div>
-                    </th>
-                    <th>
-                        <div>A2 HTML</div>
-                        <div style={{ fontWeight: 'normal' }}>Out of 100</div>
-                    </th>
-                    <th>
-                        <div>A3 CSS</div>
-                        <div style={{ fontWeight: 'normal' }}>Out of 100</div>
-                    </th>
-                    <th>
-                        <div>A4 BOOTSTRAP</div>
-                        <div style={{ fontWeight: 'normal' }}>Out of 100</div>
-                    </th>
-                    </tr>
-                </thead>
-                <tbody>
-                <tr className="text-center"><td style={{ color: 'red' }}>Jane Adams</td><td>100%</td><td>96.67%</td><td>92.18%</td><td>66.22%</td></tr>
-                <tr className="text-center"><td style={{ color: 'red' }}>Christina Allen</td><td>100%</td><td>100%</td><td>100%</td><td>100%</td></tr>
-                <tr className="text-center"><td style={{ color: 'red' }}>Samreen Ansari</td><td>100%</td><td>100%</td><td>100%</td><td>100%</td></tr>
-                <tr className="text-center"><td style={{ color: 'red' }}>Han Bao</td><td>100%</td><td>100%</td><td>92.18%</td><td>98.99%</td></tr>
-                <tr className="text-center"><td style={{ color: 'red' }}>Mahi Sai Srinivas Bobbili</td><td>100%</td>
-                <td>
-                <div className="input-group">
-                    <input type="percentile" className="form-control" 
-                    style={{
-                        width: '80px', 
-                        margin: 'auto', 
-                        border: '1px solid red', 
-                      }}
-                    value="88.03%" />
+            <div id="wd-grades-tables">
+                <div className="table-responsive">
+                    <table className="table table-striped table-bordered mt-2">
+                        <thead>
+                            <tr className="table-secondary text-center">
+                                <th style={{ verticalAlign: 'middle' }}>Student Name</th>
+                                {assignmentsList.map((assignment) => (
+                                    <th key={assignment._id}>{assignment.title}</th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {gradesList.map((student) => (
+                                <tr key={student._id}>
+                                    <td>{student.firstName} {student.lastName}</td>
+                                    {showAssignments &&
+                                    student.grades.map((grade, index) => (
+                                        <td key={index}>{grade}</td>
+                                    ))}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
-                    </td>
-                    <td>          
-                <div className="input-group">
-                    <input type="percentile" className="form-control" 
-                    style={{
-                        width: '80px', 
-                        margin: 'auto', 
-                        border: '1px solid red', 
-                      }}
-                    value="100%" />
-                </div>
-                    </td>                       
-                    <td>
-                    <div className="input-group">
-                    <input type="percentile" className="form-control" 
-                    style={{
-                        width: '80px', 
-                        margin: 'auto', 
-                        border: '1px solid red', 
-                      }}
-                    value="100%" />
-                </div>
-                </td></tr>
-                <tr className="text-center"><td style={{ color: 'red' }}>Siran Cao</td><td>100%</td><td>100%</td><td>100%</td><td>100%</td></tr>
-                </tbody>
-            </table>
             </div>
         </div>
-   </div>
-   
-   </div>
-  );
+    </div>
+);
 }
