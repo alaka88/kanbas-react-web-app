@@ -1,32 +1,69 @@
+import { useEffect, useState } from 'react';
 import { BsX } from 'react-icons/bs';
-import { Link, useLocation, useParams } from 'react-router-dom';
-import { assignments } from '../../Database';
-export default function AssignmentEditor() {
-  const {cid} = useParams();
-  const {pathname} = useLocation();
-  const aid = pathname.split("/").pop();
-  const assignment = assignments.find(a => a._id === aid);
- 
-    return (
-      <div className="container">
-      <div id="wd-assignments-editor">
-          <div className="row input-group mb-3">
-            <label htmlFor="wd-name" className="form-label">Assignment Name</label>
-            <input type="text" className="form-control" id="wd-name" value={assignment?.title} readOnly/>
-          </div>
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { addAssignment, updateAssignment } from './reducer';
 
-          <div className="row input-group mb-3">
-              <textarea className="form-control" id="wd-description" 
-              style={{ width: '100%', height: '300px' }} value={assignment?.description}></textarea>
-          </div>        
-        
+export default function AssignmentEditor() {
+  const dispatch = useDispatch();
+  const router = useNavigate();
+  const { cid } = useParams();
+  const { pathname } = useLocation();
+  const aid = pathname.split("/").pop();
+  const [assignment, setAssignment] = useState({
+    course: cid,
+    title: '',
+    description: '',
+    points: 100,
+    due: '',
+    available: '',
+    until: ''
+  });
+
+  const assignments = useSelector((state: any) => state.assignmentsReducer.assignments);
+  const existingAssignment = assignments.find((assignment:any) => assignment._id === aid);
+
+  useEffect(() => {
+    if (existingAssignment) {
+      setAssignment(existingAssignment);
+    }
+  }, [existingAssignment]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setAssignment({ ...assignment, [name]: value });
+  };
+
+  const handleAddOrUpdateAssignment = () => {
+    if (existingAssignment) {
+      dispatch(updateAssignment(assignment));
+    } else {
+      dispatch(addAssignment(assignment));
+    }
+    router(`/Kanbas/Courses/${cid}/Assignments`);
+  }
+  return (
+    <div className="container">
+      <div id="wd-assignments-editor">
+        <div className="row input-group mb-3">
+          <label htmlFor="wd-name" className="form-label">Assignment Name</label>
+          <input type="text" className="form-control" id="wd-name" name="title" value={assignment.title} placeholder={existingAssignment ? "" : "New Assignment"} onChange={handleChange} />
+        </div>
+
+        <div className="row input-group mb-3">
+          <textarea className="form-control" id="wd-description"
+            style={{ width: '100%', height: '300px' }} onChange={handleChange} value={assignment.description}placeholder={existingAssignment ? "" : "New Assignment Description"} name="description">
+          </textarea>
+        </div>
+
         <div className="row mb-2">
-            <div className="col-3">
-                <label htmlFor="wd-points" className="col-form-label float-end">Points</label>
-            </div>
-            <div className="col">
-                <input id="wd-points" type="number" className="form-control" value={assignment?.points}/>
-            </div>
+          <div className="col-3">
+            <label htmlFor="wd-points" className="col-form-label float-end">Points</label>
+          </div>
+          <div className="col">
+            <input id="wd-points" type="number" className="form-control" name="points" onChange={handleChange}
+              value={assignment.points} />
+          </div>
         </div>
         
         <div className="row mb-2">
@@ -122,31 +159,35 @@ export default function AssignmentEditor() {
                  <input type="date"
                      id="wd-due-date"
                      className="form-control"
-                     value={assignment?.due} />
+                     value={assignment.due} name="due" onChange={handleChange} />
               </div>
               <div className="row mb-3">
                 <div className="col">
                   <label htmlFor="wd-available-from"><b>Available from</b></label>
                   <input type="date" id="wd-available-from" 
-                       className="form-control" value={assignment?.available} /> 
+                       className="form-control" value={assignment.available} name="available" onChange={handleChange} /> 
                 </div>
                 <div className="col">
                   <label htmlFor="wd-available-until"><b>Until</b></label>
-                  <input type="date" id="wd-available-until" 
-                    className="form-control" value={assignment?.until} />
+                  <input type="date" id="wd-available-until" name="until"
+                    className="form-control" value={assignment.until}
+                    onChange={handleChange} />
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div className="row mt-3">
-          <hr/>
-      </div>
+    <div className="row mt-3">
+    <hr/>
+    </div>
 
-      <div className="mb-2">
-          <Link key={'save'} to={`/Kanbas/Courses/${cid}/Assignments`} className="btn btn-danger float-end ms-2">Save</Link>
-          <Link key={'cancel'} to={`/Kanbas/Courses/${cid}/Assignments`} className="btn btn-secondary float-end">Cancel</Link>
+    <div className="mb-2">
+          <input type="button" className="btn btn-danger float-end ms-2" value="Save"
+            onClick={handleAddOrUpdateAssignment} />
+          <Link key={'cancel'} to={`/Kanbas/Courses/${cid}/Assignments`}>
+            <input type="button" className="btn btn-secondary float-end" value="Cancel" />
+          </Link>
         </div>
 
         <div className="row" style={{ height: '30px', width: '100%' }}></div>

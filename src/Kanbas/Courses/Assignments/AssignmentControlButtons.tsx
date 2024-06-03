@@ -6,7 +6,7 @@ export default function AssignmentControlButtons(){
         <div className="float-end">
              
             <button className="btn btn-transparent">
-                <BsPlus className="fs-4" />
+            <BsPlus className="fs-4" />
             </button>
             <IoEllipsisVertical className="fs-4" />
             </div>

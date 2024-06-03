@@ -1,14 +1,17 @@
 import { BsCaretDownFill, BsGripVertical, BsPencilSquare } from "react-icons/bs";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
-import { assignments } from "../../Database";
-import LessonControlButtons from "../Modules/LessonControlButtons";
 import AssignmentControlButtons from "./AssignmentControlButtons";
 import AssignmentControls from "./AssignmentControls";
+import DeleteButton from "./DeleteButton";
+import { deleteAssignment } from "./reducer";
 
 export default function Assignments() {
   const { cid } = useParams();
-  const courseAssignments = assignments.filter((assignment) => assignment.course === cid);
+  const { assignments } = useSelector((state: any) => state.assignmentsReducer);
+  const cidAssignments = assignments.filter((assignment: any) => assignment.course === cid);
+  const dispatch = useDispatch();
 
   function formatDate(dateString: string) {
     const date = new Date(dateString);
@@ -44,28 +47,39 @@ export default function Assignments() {
                 </div>
             </div>
               <ul id="wd-assignment-list" className="list-group rounded-0">
-              {courseAssignments.map((assignment, index) => (
-                <li key={assignment._id} className="wd-assignment-list-item list-group-item p-3 ps-1 d-flex flex-column">
+              {cidAssignments && cidAssignments.map((assignment: any, index: number) => (
+                <li className="wd-assignment-list-item list-group-item p-3 ps-1 d-flex flex-column">
                   <div className="d-flex align-items-center mb-2">
                     <BsGripVertical className="me-2 fs-3" />
-                    <BsPencilSquare className="me-3 fs-3" style={{ color: 'green' }} />
-                    <Link className="wd-assignment-link flex-grow-1" 
-                          to={`/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}
-                          style={{ textDecoration: "none", color: "black", fontWeight: "bold" }}>
-                     {`A${index + 1}`}
-                    </Link>     
-                    <LessonControlButtons />
+                    <a className="wd-assignment-link text-dark link-underline link-underline-opacity-0"
+                                       href={`#/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}>
+                    <BsPencilSquare className="me-3 fs-3" style={{ color: 'green' }} /></a>
+                    <Link to={`/Kanbas/Courses/${cid}/Assignments/${assignment._id}`} 
+                    className="wd-assignment-link text-dark link-underline link-underline-opacity-0">
+                          <h5><b>A{index + 1} - {assignment.title}</b></h5>  
+                    </Link>
+                    
+                    <div className="col float-end">
+                                    <DeleteButton assignmentId={assignment._id}
+                                                          deleteAssignment={(assignmentId) => {
+                                                              dispatch(deleteAssignment(assignmentId));
+                                                          }}/>
+                                </div>
                   </div>
               <span className="ms-5 small">
               <span className="text-danger">Multiple Modules </span>
                   | <b>Not available until</b> {formatDate(assignment.available)} at 12:00am | <b>Due</b> {formatDate(assignment.due)} at 11:59pm | {assignment.points} pts
               </span>
+              
               </li>
+
                ))}
             </ul>
           </li>
         </ul>
      </div>
   );}
+
+  
 
   

@@ -1,6 +1,8 @@
 import { FaSearch } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
+import { Link, useParams } from "react-router-dom";
 export default function AssignmentControls(){
+    const { cid } = useParams();
     return(
         <div id="wd-assignments" className="d-flex justify-content-between align-items-center">
         <div className="d-flex align-items-center">
@@ -27,10 +29,11 @@ export default function AssignmentControls(){
                 <button
                     id="wd-add-assignment"
                     className="btn btn-lg btn-danger d-flex align-items-center"
-                    style={{ height: '45px' }}
-                >
+                    style={{ height: '45px' }}>
+                    <Link to={`/Kanbas/Courses/${cid}/Assignments/new`} className="btn btn-lg btn-danger d-flex align-items-center" style={{ height: '45px' }}>
                     <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
                     <span>Assignment</span>
+                    </Link>
                 </button>
             </div>
         </div>
