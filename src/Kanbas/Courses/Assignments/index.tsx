@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { BsCaretDownFill, BsGripVertical, BsPencilSquare } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
@@ -5,13 +6,26 @@ import { Link } from "react-router-dom";
 import AssignmentControlButtons from "./AssignmentControlButtons";
 import AssignmentControls from "./AssignmentControls";
 import DeleteButton from "./DeleteButton";
-import { deleteAssignment } from "./reducer";
+import * as client from "./client";
+import { deleteAssignment, setAssignments } from "./reducer";
 
 export default function Assignments() {
   const { cid } = useParams();
   const { assignments } = useSelector((state: any) => state.assignmentsReducer);
   const cidAssignments = assignments.filter((assignment: any) => assignment.course === cid);
   const dispatch = useDispatch();
+  const removeAssignment = async (assignmentId: string) => {
+    await client.deleteAssignment(assignmentId);
+    dispatch(deleteAssignment(assignmentId));
+  };
+
+  const fetchAssignments = async () => {
+    const assignments = await client.findAssignmentsForCourse(cid as string);
+    dispatch(setAssignments(assignments));
+  };
+  useEffect(() => {
+    fetchAssignments();
+  }, []);
 
   function formatDate(dateString: string) {
     const date = new Date(dateString);
@@ -60,12 +74,10 @@ export default function Assignments() {
                     </Link>
                     
                     <div className="col float-end">
-                                    <DeleteButton assignmentId={assignment._id}
-                                                          deleteAssignment={(assignmentId) => {
-                                                              dispatch(deleteAssignment(assignmentId));
-                                                          }}/>
-                                </div>
-                  </div>
+                          <DeleteButton assignmentId={assignment._id}
+                            deleteAssignment={(assignmentId) => {removeAssignment(assignmentId);}}/>
+                    </div>
+                </div>
               <span className="ms-5 small">
               <span className="text-danger">Multiple Modules </span>
                   | <b>Not available until</b> {formatDate(assignment.available)} at 12:00am | <b>Due</b> {formatDate(assignment.due)} at 11:59pm | {assignment.points} pts

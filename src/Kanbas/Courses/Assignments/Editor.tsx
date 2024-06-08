@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { BsX } from 'react-icons/bs';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import * as client from "./client";
 import { addAssignment, updateAssignment } from './reducer';
-
 export default function AssignmentEditor() {
   const dispatch = useDispatch();
   const router = useNavigate();
@@ -19,9 +19,17 @@ export default function AssignmentEditor() {
     available: '',
     until: ''
   });
-
   const assignments = useSelector((state: any) => state.assignmentsReducer.assignments);
   const existingAssignment = assignments.find((assignment:any) => assignment._id === aid);
+
+  const createAssignment = async (assignment: any) => {
+    const newAssignment = await client.createAssignment(cid as string, assignment);
+    dispatch(addAssignment(newAssignment));
+  };
+  const saveAssignment = async (assignment: any) => {
+    const status = await client.updateAssignment(assignment);
+    dispatch(updateAssignment(assignment));
+  };
 
   useEffect(() => {
     if (existingAssignment) {
@@ -34,11 +42,11 @@ export default function AssignmentEditor() {
     setAssignment({ ...assignment, [name]: value });
   };
 
-  const handleAddOrUpdateAssignment = () => {
+  const handleAddOrUpdateAssignment = async () => {
     if (existingAssignment) {
-      dispatch(updateAssignment(assignment));
+      await saveAssignment(assignment);
     } else {
-      dispatch(addAssignment(assignment));
+      await(createAssignment(assignment));
     }
     router(`/Kanbas/Courses/${cid}/Assignments`);
   }
