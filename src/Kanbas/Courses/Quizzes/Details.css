@@ -1,0 +1,26 @@
+.container {
+    margin-top: 100px; /* Add margin to the top of the container */
+}
+
+.btn-lightgrey {
+    background-color: #f0f0f0; /* Light grey background */
+    color: #333; /* Dark text color */
+    border-color: #ccc; /* Light border color */
+}
+
+.btn-lightgrey:hover {
+    background-color: #e0e0e0; /* Light grey on hover */
+}
+
+.btn-secondary {
+    background-color: #6c757d; /* Dark grey background */
+    color: #fff; /* White text color */
+    border-color: #6c757d; /* Dark border color */
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268; /* Dark grey on hover */
+}
+.btn-secondary:hover {
+    background-color: #5a6268; /* Dark grey on hover */
+}

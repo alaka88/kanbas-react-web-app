@@ -1,7 +1,11 @@
 import { FaSearch } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
 import { IoEllipsisVertical } from "react-icons/io5";
-export default function AssignmentControls(){
+import { Link, useParams } from "react-router-dom";
+
+
+export default function QuizControls(){
+    const { cid,qid } = useParams();
     return(
         <div id="wd-quizzes" className="d-flex justify-content-between align-items-center">
         <div className="d-flex align-items-center">
@@ -9,7 +13,7 @@ export default function AssignmentControls(){
           <input
             id="wd-search-quizz"
             className="form-control me-1"
-            placeholder="Search for Quizz"
+            placeholder="Search for Quiz"
             style={{ width: '300px', height: '45px', paddingLeft: '36px', fontSize: '16px', background: '#fff' }}
           />
           <FaSearch className="position-absolute" style={{ left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#ccc', fontSize: '16px' }} />
@@ -18,15 +22,16 @@ export default function AssignmentControls(){
       
             <div className="d-flex">
                 <button
-                    id="wd-add-quizz"
+                    id="wd-add-quiz"
                     className="btn btn-lg btn-danger d-flex align-items-center me-2"
-                    style={{ height: '45px' }}
-                >
+                    style={{ height: '45px', padding: '5px 10px'}}>
+                    <Link to={`/Kanbas/Courses/${cid}/Quizzes/details`} className="btn btn-lg btn-danger d-flex align-items-center" style={{ height: '45px' }}>
                     <FaPlus className="position-relative me-1" style={{ bottom: "1px" }} />
-                    <span>Quizz</span>
-                </button>
+                    <span>Quiz</span> 
+                    </Link>       
+                </button>    
                 <button
-                    id="wd-add-quizz-group"
+                    id="wd-add-quiz-group"
                     className="btn btn-lg btn-secondary me-1 d-flex align-items-center"
                     style={{ height: '45px' }}
                 >

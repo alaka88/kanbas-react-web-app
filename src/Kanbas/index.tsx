@@ -57,7 +57,8 @@ export default function Kanbas() {
       </div>
       <div className="flex-fill p-4" style={{ marginLeft: '120px' }}>
         <Routes>
-          <Route path="/" element={<Navigate to="Dashboard" />} />
+          
+          <Route path="/" element={<Navigate to="Kanbas" />} />
           <Route path="Account" element={<Account />} />
           <Route path="Dashboard" element={<Dashboard
           courses={courses}
@@ -69,7 +70,14 @@ export default function Kanbas() {
           } />
           <Route path="Courses/:cid/*" element={<Courses courses={courses}/>} />
           <Route path="Calendar" element={<h1>Calendar</h1>} />
-          <Route path="Inbox" element={<h1>Inbox</h1>} />           
+          <Route path="Inbox" element={<h1>Inbox</h1>} />     
+          <Route path="Kanbas" element={<Dashboard
+              courses={courses}
+              course={course}
+              setCourse={setCourse}
+              addNewCourse={addNewCourse}
+              deleteCourse={deleteCourse}
+              updateCourse={updateCourse} />} />
         </Routes>
       </div>
     </div>
