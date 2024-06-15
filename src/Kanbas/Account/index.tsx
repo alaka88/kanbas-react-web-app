@@ -4,6 +4,7 @@ import AccountNavigation from "./Navigation";
 import Profile from "./Profile";
 import Signin from "./Signin";
 import Signup from "./Signup";
+
 export default function Account() {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   return (
