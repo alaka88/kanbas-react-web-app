@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Account from "./Account";
-import Session from "./Account/Session";
 import Courses from "./Courses";
 import * as client from "./Courses/client";
 import Dashboard from "./Dashboard";
@@ -10,14 +9,12 @@ import KanbasNavigation from "./Navigation";
 import ProtectedRoute from "./ProtectedRoute";
 import store from "./store";
 import "./styles.css";
-
 export default function Kanbas() {
   const [courses, setCourses] = useState<any[]>([]);
   const fetchCourses = async () => {
   const courses = await client.fetchAllCourses();
   setCourses(courses);
   };
-  
   const [course, setCourse] = useState<any>({
         _id: "0", 
         name: "New Course", 
@@ -43,8 +40,7 @@ export default function Kanbas() {
         return course;
         } else {
         return c;
-        }
-        })
+        }})
         );
         };
         useEffect(() => {
@@ -52,7 +48,6 @@ export default function Kanbas() {
           }, []);
   return (
     <Provider store={store}>
-      <Session>
     <div id="wd-kanbas" className="h-100 d-flex">
       <div className="d-none d-md-block bg-black h-100 position-fixed" >
         <KanbasNavigation />
@@ -82,7 +77,6 @@ export default function Kanbas() {
         </Routes>
       </div>
     </div>
-   </Session>
     </Provider>
   );
 }
