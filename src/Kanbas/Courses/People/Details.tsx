@@ -74,6 +74,7 @@ return (
                         type="email"
                         className="form-control w-50"
                         defaultValue={user.email}
+                        placeholder="email"
                         onChange={(e) => setEmail(e.target.value)}
                         onKeyDown={(e) => {
                             if (e.key === "Enter") {
