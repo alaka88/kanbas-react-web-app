@@ -18,7 +18,6 @@ export default function QuizDetails() {
                     </button>
                 </div><hr/>
                 <h2><b>Q</b></h2>
-
             </div>
         );
     }
