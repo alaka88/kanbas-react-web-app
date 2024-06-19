@@ -1,27 +1,107 @@
 import { createSlice } from "@reduxjs/toolkit";
+
 const initialState = {
-  quizzes: [],
+  quizzes: [] as { id: string; title: string; published: boolean; }[],
+    quiz: {
+        id: 1,
+        title: "new quiz",
+        quizType: 'Graded Quiz',
+        published: false,
+        points: 0,
+        assignmentGroup: 'QUIZZES',
+        shuffleAnswers: "Yes",
+        timeLimit: "20 Minutes",
+        multipleAttempts: "No",
+        showCorrectAnswers: "Immediately",
+        accessCode: '',
+        oneQuestionAtATime: "Yes",
+        webcamRequired: "No",
+        lockQuestionsAfterAnswering: "No",
+        dueDate: "Sep 21 at 1pm",
+        availableDate: "Sep 21 at 11:40am",
+        untilDate: "Sep 21 at 1pm",
+        for: "Everyone",
+        requireRespondus: "No",
+        requireViewQuizResult: "No",
+        viewResponse: "Always",
+        questions: 0,
+        questionList: [
+            {
+                _id: "Q101",
+                name: "This is the first question?",
+                type: "truefalse",
+                answer: "true",
+                point: 1
+            },
+            {
+                _id: "Q102",
+                name: "This is the last question?",
+                type: "Fill in the Blank",
+                answer: "false",
+                point: 100
+            },
+            {
+                _id: "Q103",
+                name: "This is the not question?",
+                type: "MCQ",
+                correctAnswer: "correct Answer",
+                options: [
+                    {op: "option 1"},
+                    {op: "option 2"},
+                    {op: "option 3"}
+                ],
+                point: 4
+            }
+        ]
+    },
 };
-const quizzesSlice = createSlice({
-  name: "quizzes",
-  initialState,
-  reducers: {
-    setQuizzes: (state, action) => {
-      state.quizzes = action.payload;
-    },
-    addQuiz: (state, { payload: quiz }) => {
-      const newQuiz: any = {...quiz, _id: new Date().getTime().toString()};
-      state.quizzes = [...state.quizzes, newQuiz] as any;
-    },
-    deleteQuiz: (state, { payload: quizId }) => {
-      state.quizzes = state.quizzes.filter((q:any) => q._id !== quizId) as any;
-    },
-    updateQuiz: (state, { payload: quiz }) => {
-      state.quizzes = state.quizzes.map((q:any) =>
-        q._id === quiz._id ? quiz : q
-      ) as any;
-    },
-  },
+
+export const toggleQuizPublished = (quizId: any) => ({
+    type: 'UPDATE_QUIZ_LIST',
+    payload: quizId,
 });
-export const { addQuiz, deleteQuiz, updateQuiz, setQuizzes} = quizzesSlice.actions;
+
+const quizzesSlice = createSlice({
+    name: "quizzes",
+    initialState,
+    reducers: {
+        setQuizzes: (state, action) => {
+            state.quizzes = action.payload;
+        },
+        addQuiz: (state, action) => {
+            state.quizzes = [action.payload, ...state.quizzes];
+        },
+        deleteQuiz: (state, action) => {
+            state.quizzes = state.quizzes.filter((quiz) =>
+                quiz.id !== action.payload);
+        },
+        updateQuiz: (state, action) => {
+            state.quizzes = state.quizzes.map((quiz) => {
+                if (quiz.id === action.payload.id) {
+                    return action.payload;
+                } else {
+                    return quiz;
+                }
+            });
+        },
+        setQuiz: (state, action) => {
+            state.quiz = action.payload;
+        },
+        selectQuiz: (state, action) => {
+          state.quiz = action.payload;
+        },
+        publishQuiz: (state, action) => {
+          state.quizzes = state.quizzes.map((quiz) =>
+              quiz.id === action.payload ? { ...quiz, published: true } : quiz
+          );
+      },
+      unpublishQuiz: (state, action) => {
+          state.quizzes = state.quizzes.map((quiz) =>
+              quiz.id === action.payload ? { ...quiz, published: false } : quiz
+          );
+      },
+    },
+});
+
+export const { setQuizzes, addQuiz, deleteQuiz, updateQuiz,setQuiz,selectQuiz, publishQuiz, unpublishQuiz} = quizzesSlice.actions;
 export default quizzesSlice.reducer;

@@ -5,7 +5,7 @@ import * as client from "./client";
 import { setCurrentUser } from "./reducer";
 export default function Profile() {
   const [profile, setProfile] = useState<any>({});
-  const [showDialog, setShowDialog] = useState(false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const fetchProfile = async () => {
@@ -16,7 +16,10 @@ export default function Profile() {
       navigate("/Kanbas/Account/Signin");
     }
   };
- 
+  const save = async () => {
+    await client.updateUser(profile);
+    navigate("/Kanbas/Dashboard");
+  };
   const signout = async () => {
     await client.signout();
     dispatch(setCurrentUser(null));
@@ -76,7 +79,9 @@ export default function Profile() {
             <option value="FACULTY">Faculty</option>
             <option value="STUDENT">Student</option>
           </select>
-          
+          <button onClick={save} className="btn btn-primary w-100">
+            Save
+          </button>
         </div>
       )}
        <button onClick={signout} className="btn btn-danger w-100">

@@ -56,12 +56,11 @@ export default function Quizzes(){
                 <div className="d-flex align-items-center mb-2">
                   <BsRocketTakeoff className="me-3 fs-3" style={{ color: 'green' }} />
                   <Link className="wd-quiz-link flex-grow-1"
-                        to={`/Kanbas/Courses/${cid}/Quizzes/${quiz._id}`}
+                        to={`/Kanbas/Courses/${cid}/Quizzes/${quiz._id}/`}
                         style={{ textDecoration: "none", color: "black", fontWeight: "bold" }}>
                     <h5><b>Q{index + 1} - {quiz.title}</b></h5>
                   </Link>
-                  <QuizControlButton quizId={quiz._id}
-                  deleteQuiz={(quizId) => { removeQuiz(quizId); }}/>
+                  <QuizControlButton quizId={quiz._id} deleteQuiz={(quizId) => { removeQuiz(quizId); }} quiz={quiz} />
                 </div>
                 <span className="ms-5 small">
                   <span className="text-danger">Available</span>
