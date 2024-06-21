@@ -1,60 +1,37 @@
 import axios from "axios";
 const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER;
 const COURSES_API = `${REMOTE_SERVER}/api/courses`;
-const QUIZZES_API = `${REMOTE_SERVER}/api/quizzes`;
+const QUIZ_API = `${REMOTE_SERVER}/api/quizzes`;
 
-const api = axios.create({
-  withCredentials: true
-})
+// fetch all quizzes for a course
+export const findQuizzesForCourse = async (cid: any) => {
+    const response = await axios
+        .get(`${COURSES_API}/${cid}/quizzes`);
+    return response.data;
+};
 
-export interface Quiz {
-  _id: string;
-  description: string;
-  title: string;
-  quizType: string;
-  points: string
-  assignmentGroup: string,
-  shuffleAnswers: string,
-  timeLimit: string,
-  multipleAttempts: boolean,
-  showCorrectAnswers: boolean,
-  accessCode:string,
-  oneQuestionAtATime:boolean,
-  webcamRequired: boolean,
-  lockQuestionsAfterAnswering: boolean,
-  dueDate: Date, 
-  availableDate: Date,
-  untilDate: Date,
-  for: string,
-  requireRespondus: boolean,
-  requireViewQuizResult: boolean,
-  viewResponse: string,
-  course: string,
-  published: boolean,
-  questions: string,
-  questionList: [{
-      id: string,
-      name: string,
-      type: string,
-      answer: string,
-      points: number
-  }]
-}
+// fetch details of a quiz
+export const findQuizDetails = async (cid: string, qid: string) => {
+    const response = await axios
+        .get(`${COURSES_API}/${cid}/quizzes/${qid}`);
+    return response.data;
+};
 
+// Creating a quiz for a Course
+export const createQuiz = async (cid: string, quiz: any) => {
+    const response = await axios.post(`${COURSES_API}/${cid}/quizzes`, quiz);
+    return response.data;
+};
+
+
+// Update a quiz
 export const updateQuiz = async (quiz: any) => {
-  const response = await api.put(`${COURSES_API}/quizzes/${quiz._id}`, quiz);
-  return response.data;
-};
-export const deleteQuiz = async (quiz: any) => {
-  const response = await api.delete(`${COURSES_API}/quizzes/${quiz._id}`);
-  return response.data;
-};
-export const createQuiz = async (quiz: any) => {
-  const response = await api.post(`${COURSES_API}/quizzes/${quiz._id}`, quiz);
-  return response.data
+    const response = await axios.put(`${QUIZ_API}/${quiz._id}`, quiz);
+    return response.data;
 };
 
-export const findQuizzesForCourse = async (courseId: any) => {
-  const response = await api.get(`${COURSES_API}/${courseId}/quizzes`);
-  return response.data;
+// Deleting a quiz
+export const deleteQuiz = async (qid: string) => {
+    const response = await axios.delete(`${QUIZ_API}/${qid}`);
+    return response.data;
 };

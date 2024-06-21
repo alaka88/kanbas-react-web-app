@@ -57,8 +57,8 @@ export default function QuizControls() {
                     style={{ height: '45px', padding: '5px 10px' }}
                     onClick={addQuiz}
                 >
-                    <Link to={`/Kanbas/Courses/${cid}/Quizzes/newquiz`} className="btn btn-lg btn-danger d-flex align-items-center" style={{ height: '45px' }}>
-                    <span>Quiz</span>
+                    <Link to={`/Kanbas/Courses/${cid}/Quizzes/details`} className="btn btn-lg btn-danger d-flex align-items-center" style={{ height: '45px' }}>
+                    <span>+ Quiz</span>
                     </Link>
                 </button>
                 <button

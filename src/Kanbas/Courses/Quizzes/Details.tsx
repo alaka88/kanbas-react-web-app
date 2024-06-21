@@ -13,7 +13,7 @@ export default function QuizDetails() {
     const { courseId } = useParams();
     const dispatch = useDispatch();
     const location = useLocation();
-
+    const { cid } = useParams();
     const [showQuiz, setShowQuiz] = useState(true);
     const [isPublished, setIsPublished] = useState(true);
     const togglePublishStatus = () => {
@@ -26,7 +26,13 @@ export default function QuizDetails() {
                 dispatch(setQuizzes(quizzes))
             );
     }, [courseId]);
-
+    const publishIcon = isPublished ? (
+        <FaCheckCircle className="text-success" />
+      ) : (
+        <FaTimesCircle className="text-danger" />
+      );
+      const publishText = isPublished ? "Published" : "Unpublished";
+    
     const quiz = useSelector((state: KanbasState) =>
         state.quizzesReducer.quiz);
     return (
@@ -34,16 +40,16 @@ export default function QuizDetails() {
             <div id="wd-bt" className="float end">
             <button className="btn btn-lightgrey me-3 wd-fg-color-green button-padding"
                 onClick={togglePublishStatus}>
-            {isPublished ? <FaCheckCircle className="text-success" /> : <FaTimesCircle className="text-danger" />}
-            <span className={isPublished ? 'text-success' : 'text-danger'}>
-                {isPublished ? ' Published' : ' Unpublish'}
+            {publishIcon}
+          <span className={isPublished ? "text-success" : "text-danger"}>
+            {publishText}
             </span>
         </button>
-                <Link to={`/Kanbas/Courses/${quiz.course}/Quizzes/newquiz/preview`}>
+                <Link to={`/Kanbas/Courses/${cid}/Quizzes/newquiz/preview`}>
                     <button className="btn btn-lightgrey me-3">Preview</button>
                 </Link>
                 <span className="text-muted"></span>
-                <Link to={`/Kanbas/Courses/${quiz.course}/Quizzes/newquiz/editor`}>
+                <Link to={`/Kanbas/Courses/${cid}/Quizzes/editor`}>
                     <button type="button" className="btn btn-lightgrey">
                         <FaPencil /> Edit
                     </button>

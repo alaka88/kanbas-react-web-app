@@ -2,14 +2,15 @@ import { IoEllipsisVertical } from "react-icons/io5";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
+import { publishQuiz, unpublishQuiz } from "./reducer";
 
-import { publishQuiz, unpublishQuiz } from "./reducer"; // import actions
+
 
 export default function QuizControlButton({ quizId, deleteQuiz, quiz }: { quizId: string; deleteQuiz: (quizId: string) => void; quiz: any }) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const handlePublish = () => {
+    const handlePublishToggle = () => {
         if (quiz.published) {
             dispatch(unpublishQuiz(quizId));
         } else {
@@ -24,7 +25,7 @@ export default function QuizControlButton({ quizId, deleteQuiz, quiz }: { quizId
             </button>
             <ul className="dropdown-menu">
                 <li>
-                    <Link id="wd-edit-items-btn" className="dropdown-item" to={`/Kanbas/Courses/${quiz.course}/Quizzes/${quizId}/edit`}>
+                    <Link id="wd-edit-items-btn" className="dropdown-item" to={`/Kanbas/Courses/${quiz.course}/Quizzes/editor`}>
                       Edit
                     </Link>
                 </li>
@@ -34,8 +35,8 @@ export default function QuizControlButton({ quizId, deleteQuiz, quiz }: { quizId
                     </button>
                 </li>
                 <li>
-                    <button id="wd-publish-item-button" className="dropdown-item" onClick={handlePublish}>
-                      {quiz.published ? 'Unpublish' : 'Publish'}
+                    <button id="wd-publish-item-button" className="dropdown-item" onClick={handlePublishToggle}>
+                        {quiz.published ? 'Unpublish' : 'Publish'}
                     </button>
                 </li>
             </ul>
