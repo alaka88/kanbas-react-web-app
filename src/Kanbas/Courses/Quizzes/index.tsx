@@ -1,25 +1,32 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BsCaretDownFill, BsRocketTakeoff } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-
-
 import QuizControl from "./QuizControl";
 import QuizControlButton from "./QuizControlButton";
 import * as client from "./client";
-import { deleteQuiz, publishQuiz, setQuizzes, unpublishQuiz } from "./reducer";
+import { deleteQuiz, publishQuiz, setQuizzes, unpublishQuiz, updateQuiz } from "./reducer";
 
 export default function Quizzes(){
   const { cid } = useParams();
   const dispatch = useDispatch();
+
+  const [QuizName, setQuizName] = useState("");
+
   const removeQuiz = async (quizId: string) => {
+    console.log("Removing quiz with ID:", quizId); // Log the quizId before deletion
     await client.deleteQuiz(quizId);
     dispatch(deleteQuiz(quizId));
-    }; 
+  };
   const fetchQuizzes = async () => {
     const quizzes = await client.findQuizzesForCourse(cid as string);
     dispatch(setQuizzes(quizzes));
   };
+
+const saveQuiz = async (quiz: any) => {
+  const status = await client.updateQuiz(quiz);
+  dispatch(updateQuiz(quiz));
+};
 
   useEffect(() => {
     fetchQuizzes();
@@ -44,7 +51,7 @@ export default function Quizzes(){
         dispatch(publishQuiz(quizId));
     }
 };
-
+   
   return (
     <div id="wd-quizzes">
       <QuizControl />
@@ -61,12 +68,13 @@ export default function Quizzes(){
           </div>
           <ul id="wd-quiz-list" className="list-group rounded-0">
           {quizzes.filter((quiz: any) => quiz.course === cid).map((quiz: any,index:any) => (
-              <li className="wd-quiz-list-item list-group-item p-3 ps-1 d-flex flex-column">
+              <li key={quiz._id} className="wd-quiz-list-item list-group-item p-3 ps-1 d-flex flex-column">
                 <div className="d-flex align-items-center mb-2">
                   <BsRocketTakeoff className="me-3 fs-3" style={{ color: 'green' }} />
                   
                   <Link className="wd-quiz-link flex-grow-1"
-                        to={`/Kanbas/Courses/${cid}/Quizzes/details`}
+                  key={`quiz-link-${quiz._id}`} 
+                        to={`/Kanbas/Courses/${cid}/Quizzes/${quiz._id}`}
                         style={{ textDecoration: "none", color: "black", fontWeight: "bold" }}>
                     <h5><b>Q{index + 1} - {quiz.title}</b></h5>
                   </Link>

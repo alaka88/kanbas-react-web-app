@@ -6,7 +6,7 @@ import { publishQuiz, unpublishQuiz } from "./reducer";
 
 
 
-export default function QuizControlButton({ quizId, deleteQuiz, quiz }: { quizId: string; deleteQuiz: (quizId: string) => void; quiz: any }) {
+export default function QuizControlButton({ quizId, deleteQuiz,quiz }: { quizId: string; deleteQuiz: (quizId: string) => void; quiz: any }) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -18,6 +18,7 @@ export default function QuizControlButton({ quizId, deleteQuiz, quiz }: { quizId
         }
     };
 
+    
     return(
         <div className="float-end">
             <button className="btn btn-transparent" style={{ padding: '1px' }} type="button" data-bs-toggle="dropdown">
@@ -30,9 +31,10 @@ export default function QuizControlButton({ quizId, deleteQuiz, quiz }: { quizId
                     </Link>
                 </li>
                 <li>
-                    <button id="wd-delete-item-button" className="dropdown-item" onClick={() => deleteQuiz(quizId)}>
+                    <Link id="wd-delete-item-button" className="dropdown-item" onClick={() => deleteQuiz(quizId)}
+                     to={`/Kanbas/Courses/${quiz.course}/Quizzes`}>
                       Delete
-                    </button>
+                    </Link>
                 </li>
                 <li>
                     <button id="wd-publish-item-button" className="dropdown-item" onClick={handlePublishToggle}>
