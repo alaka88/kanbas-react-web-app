@@ -53,7 +53,7 @@ export default function MyCourses() {
                 <button className="btn btn-primary float-end"
                         id="wd-add-new-course-click"
                         onClick={addNewCourse}> Add </button>
-                <br/>
+                <br/><br/>
                 <select className="form-select" value={course._id} onChange={handleChangeCourse}>
                     {courses.map((course) => (
                         <option value={course._id}>{course.name}</option>

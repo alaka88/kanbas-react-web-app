@@ -56,9 +56,9 @@ export default function Quizzes() {
     const handleClickItem = (quizzes: any) => {
         const url = `/Kanbas/Courses/${cid}/Quizzes/Detail/${quizzes._id}`
         if (currentUser && currentUser.role === "STUDENT") {
-            if (handleAvailable(quizzes) == "Available") {
+            if (handleAvailable(quizzes) === "Available") {
                 router(url)
-            } else if (handleAvailable(quizzes) == "Closed") {
+            } else if (handleAvailable(quizzes) === "Closed") {
                 alert("Quizzes is closed");
             } else {
                 alert("Quizzes is not available yet");
