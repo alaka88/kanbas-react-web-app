@@ -1,64 +1,82 @@
-import { useEffect, useState } from "react";
+
+import moment from 'moment';
+import { useEffect } from "react";
 import { BsCaretDownFill, BsRocketTakeoff } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
-import QuizControl from "./QuizControl";
-import QuizControlButton from "./QuizControlButton";
+import { useParams } from "react-router";
 import * as client from "./client";
-import { deleteQuiz, publishQuiz, setQuizzes, unpublishQuiz, updateQuiz } from "./reducer";
+import { deleteQuizzes, setQuizzes } from "./reducer";
 
-export default function Quizzes(){
-  const { cid } = useParams();
-  const dispatch = useDispatch();
+import { useNavigate } from "react-router-dom";
+import LessonControlButtons from "./LessonControlButton";
+import QuizzesControls from "./QuizControl";
 
-  const [QuizName, setQuizName] = useState("");
+export default function Quizzes() {
+    const {cid} = useParams();
+    const router = useNavigate();
+    const {quizzes} = useSelector((state: any) => state.quizzesReducer);
+    const cidQuizzes = quizzes.filter((quizzes: any) => quizzes.course === cid);
+    const dispatch = useDispatch();
 
-  const removeQuiz = async (quizId: string) => {
-    console.log("Removing quiz with ID:", quizId); // Log the quizId before deletion
-    await client.deleteQuiz(quizId);
-    dispatch(deleteQuiz(quizId));
-  };
-  const fetchQuizzes = async () => {
-    const quizzes = await client.findQuizzesForCourse(cid as string);
-    dispatch(setQuizzes(quizzes));
-  };
+    const {currentUser} = useSelector((state: any) => state.accountReducer);
 
-const saveQuiz = async (quiz: any) => {
-  const status = await client.updateQuiz(quiz);
-  dispatch(updateQuiz(quiz));
-};
+    useEffect(() => {
+        fetchQuizzes();
+    }, []);
 
-  useEffect(() => {
-    fetchQuizzes();
-  }, []);
-    
-  const { quizzes } = useSelector((state: any) => state.quizzesReducer);
-
-
-  function formatDate(dateString: string) {
-    const date = new Date(dateString);
-    const options: Intl.DateTimeFormatOptions = {
-      month: "long",
-      day: "numeric",
+    const fetchQuizzes = async () => {
+        const quizzes = await client.findQuizzesForCourse(cid as string);
+        dispatch(setQuizzes(quizzes));
     };
-    const formattedDate = date.toLocaleDateString("en-US", options);
-    return formattedDate;
-  }
-  const handlePublish = (quizId: string, isPublished: boolean) => {
-    if (isPublished) {
-        dispatch(unpublishQuiz(quizId));
-    } else {
-        dispatch(publishQuiz(quizId));
+
+    const removeQuizzes = async (moduleId: string) => {
+        await client.deleteQuizzes(moduleId);
+        dispatch(deleteQuizzes(moduleId));
+    };
+
+    const setPublished = async (quizzesId: string, published: boolean) => {
+        await client.updateQuizzes({
+            _id: quizzesId,
+            publish: published
+        });
+        fetchQuizzes();
+    };
+
+    const handleAvailable = (item: any) => {
+       
+        if (moment(item.available).isAfter(moment())) {
+            return "Not available until " + moment(item.available).format("MMM Do YYYY, h:mm a");
+        } else if (moment(item.available).isBefore(moment()) && moment(item.until).isAfter(moment())) {
+            return "Available";
+        } else {
+            return "Closed";
+        }
     }
-};
-   
-  return (
-    <div id="wd-quizzes">
-      <QuizControl />
-      <br />
-      <br />
-      <br />
-      <ul id="wd-quizzes-title" className="list-group rounded-0">
+
+    const handleClickItem = (quizzes: any) => {
+        const url = `/Kanbas/Courses/${cid}/Quizzes/Detail/${quizzes._id}`
+        if (currentUser && currentUser.role === "STUDENT") {
+            if (handleAvailable(quizzes) == "Available") {
+                router(url)
+            } else if (handleAvailable(quizzes) == "Closed") {
+                alert("Quizzes is closed");
+            } else {
+                alert("Quizzes is not available yet");
+            }
+        } else {
+            router(url)
+        }
+    }
+
+    return (
+        <div id="wd-quizzess">
+            {
+                currentUser && currentUser.role === "FACULTY" && (
+                    <QuizzesControls/>
+                )
+            }
+<br /><br /><br />
+<ul id="wd-quizzes-title" className="list-group rounded-0">
         <li className="wd-module list-group-item p-0 mb-5 fs-5 border-gray" style={{ borderLeft: '4px solid green' }}>
           <div className="wd-title p-3 ps-2 bg-secondary">
             <button id="wd-quiz-title" className="btn btn-transparent">
@@ -66,36 +84,36 @@ const saveQuiz = async (quiz: any) => {
               <span className="fw-bold">Assignment Quizzes</span>
             </button>
           </div>
-          <ul id="wd-quiz-list" className="list-group rounded-0">
-          {quizzes.filter((quiz: any) => quiz.course === cid).map((quiz: any,index:any) => (
-              <li key={quiz._id} className="wd-quiz-list-item list-group-item p-3 ps-1 d-flex flex-column">
-                <div className="d-flex align-items-center mb-2">
-                  <BsRocketTakeoff className="me-3 fs-3" style={{ color: 'green' }} />
-                  
-                  <Link className="wd-quiz-link flex-grow-1"
-                  key={`quiz-link-${quiz._id}`} 
-                        to={`/Kanbas/Courses/${cid}/Quizzes/${quiz._id}`}
-                        style={{ textDecoration: "none", color: "black", fontWeight: "bold" }}>
-                    <h5><b>Q{index + 1} - {quiz.title}</b></h5>
-                  </Link>
-                  <span 
-                                        className="me-3 fs-3 "
-                                        style={{ color: 'green', cursor: 'pointer' }}
-                                        onClick={() => handlePublish(quiz._id, quiz.published)}
-                                    >
-                                        {quiz.published ? '✅' : '🚫'}
-                                    </span>
-                  <QuizControlButton quizId={quiz._id} deleteQuiz={(quizId) => { removeQuiz(quizId); }} quiz={quiz} />
-                </div>
-                <span className="ms-5 small">
-                  <span className="text-danger">Available</span>
-                  | <b>Due</b> {formatDate(quiz.due)} at 11:59pm | {quiz.points} pts
-                </span>
-              </li>
-            ))}
-          </ul>
-        </li>
-      </ul>
-    </div>
-  );
+                {
+                    cidQuizzes.length === 0 && (
+                        <span>
+                            Click on the "+Quiz" button to add a new Quizzes.
+                        </span>
+                    )
+                }
+ <ul id="wd-quiz-list" className="list-group rounded-0">
+                        {cidQuizzes && cidQuizzes.map((item: any) => (
+                            <li className="wd-quiz-list-item list-group-item p-3 ps-1 d-flex flex-column" key={item._id}>
+                                <div className="d-flex align-items-center mb-2">
+                                    <BsRocketTakeoff className="me-3 fs-3" style={{ color: 'green' }} />
+                                    <h5 className="wd-quiz-link flex-grow-1" onClick={() => handleClickItem(item)}>
+                                        <b>{item.title}</b>
+                                    </h5>
+                                    <div className="ms-auto">
+                                        <LessonControlButtons quizzesId={item._id} deleteQuizzes={removeQuizzes} published={item?.publish} setPublished={setPublished} />
+                                    </div>
+                                </div>
+                                <p className="small ms-4 mb-2">
+                                    <b>{handleAvailable(item)}</b>
+                                    | <b>Due</b> {moment(item.available).format("MMM D[ at ]ha")}
+                                    | {item?.points} pts
+                                    | {item?.questions?.length || 0} Questions
+                                </p>
+                            </li>
+                        ))}
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    );
 }

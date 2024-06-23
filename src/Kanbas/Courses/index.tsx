@@ -8,8 +8,10 @@ import Modules from "./Modules";
 import CoursesNavigation from "./Navigation";
 import PeopleTable from "./People/Table";
 import Quizzes from "./Quizzes";
-import QuizDetails from "./Quizzes/Details";
-import QuizEditor from "./Quizzes/Editor";
+import QuizzesDetail from "./Quizzes/QuizDetails";
+import QuizzesEditor from "./Quizzes/QuizEdit";
+import QuizzesPreview from "./Quizzes/QuizPreview";
+
 
 
 
@@ -38,9 +40,10 @@ export default function Courses({ courses }: { courses: any[]; }) {
               <Route path="Assignments" element={<Assignments />} />
               <Route path="Assignments/:id" element={<AssignmentEditor />} />   
               <Route path="Quizzes" element={<Quizzes />} />
-              <Route path="Quizzes/details" element={<QuizDetails />} />
-              <Route path="Quizzes/:id" element={<QuizDetails />} />
-              <Route path="Quizzes/editor" element={<QuizEditor />} />
+              <Route path="Quizzes/add" element={<QuizzesEditor/>}/>
+                        <Route path="Quizzes/Detail/:qid" element={<QuizzesDetail/>}/>
+                        <Route path="Quizzes/Edit/:qid" element={<QuizzesEditor/>}/>
+                        <Route path="Quizzes/Preview/:qid" element={<QuizzesPreview/>}/>
 
               <Route path="Grades" element={<Grades />} />
               <Route path="People" element={<PeopleTable />} />

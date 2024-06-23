@@ -1,40 +1,39 @@
 import { FaSearch } from "react-icons/fa";
 import { IoEllipsisVertical } from "react-icons/io5";
-import { useDispatch } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { addQuiz } from "./reducer";
+import { useNavigate, useParams } from "react-router-dom";
+import { createQuizzes } from "./client";
 
-export default function QuizControls() {
-    const { cid } = useParams();
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+export default function QuizzesControls() {
+    const {cid} = useParams();
+    const router = useNavigate();
 
-    const handleAddQuiz = () => {
-        const defaultQuiz = {
-            title: "New Quiz",
-            course: cid,
-            quizType: "Multiple Choice",
+    const addQuizzes = async () => {
+        const response = await createQuizzes(cid as string, {
+            course: "",
+            title: "New Quizzes",
+            type: "Graded Quiz",
             points: 0,
-            assignmentGroup: "",
+            assignmentGroup: "Quizzes",
             shuffleAnswers: false,
-            timeLimit: 0,
+            timeLimit: 20,
             multipleAttempts: false,
-            viewResponse: false,
-            showCorrectAnswers: false,
-            oneQuestionAtATime: false,
-            requireRespondus: false,
-            requireViewQuizResult: false,
+            manysAttempts: 1,
+            showCorrectAnswers: true,
+            accessCode: "",
+            oneQuestionAtTime: false,
             webcamRequired: false,
             lockQuestionsAfterAnswering: false,
-            dueDate: "",
-            availableDate: "",
-            untilDate: "",
-            published: false,
-        };
-
-        dispatch(addQuiz(defaultQuiz));
-        navigate(`/Kanbas/Courses/${cid}/Quizzes/newquiz`);
-    };
+            publish: false,
+            questions: [],
+            available: Date.now(),
+            due: Date.now(),
+            until: Date.now()
+        });
+        console.log(response)
+        if (response) {
+            router(`/Kanbas/Courses/${cid}/Quizzes/Detail/${response._id}`)
+        }
+    }
 
     return (
         <div id="wd-quizzes" className="d-flex justify-content-between align-items-center">
@@ -49,26 +48,25 @@ export default function QuizControls() {
                     <FaSearch className="position-absolute" style={{ left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#ccc', fontSize: '16px' }} />
                 </div>
             </div>
-
             <div className="d-flex">
                 <button
                     id="wd-add-quiz"
                     className="btn btn-lg btn-danger d-flex align-items-center me-2"
-                    style={{ height: '45px', padding: '5px 10px' }}
-                    onClick={addQuiz}
+                    style={{ height: '45px' }}
+                    onClick={addQuizzes}
                 >
-                    <Link to={`/Kanbas/Courses/${cid}/Quizzes/details`} className="btn btn-lg btn-danger d-flex align-items-center" style={{ height: '45px' }}>
+                    
                     <span>+ Quiz</span>
-                    </Link>
+                 
                 </button>
                 <button
                     id="wd-add-quiz-group"
                     className="btn btn-lg btn-secondary me-1 d-flex align-items-center"
-                    style={{ height: '45px' }}
+                    style={{ height: '45px' , padding: '5px 10px'}}
                 >
                     <IoEllipsisVertical className="position-relative" style={{ bottom: "1px" }} />
                 </button>
             </div>
         </div>
-    );
+    )
 }

@@ -1,47 +1,11 @@
+import { FaPlus } from "react-icons/fa6";
 import { IoEllipsisVertical } from "react-icons/io5";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
-import { Link } from "react-router-dom";
-import { publishQuiz, unpublishQuiz } from "./reducer";
 
-
-
-export default function QuizControlButton({ quizId, deleteQuiz,quiz }: { quizId: string; deleteQuiz: (quizId: string) => void; quiz: any }) {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-
-    const handlePublishToggle = () => {
-        if (quiz.published) {
-            dispatch(unpublishQuiz(quizId));
-        } else {
-            dispatch(publishQuiz(quizId));
-        }
-    };
-
-    
-    return(
+export default function QuizzesControlButtons() {
+    return (
         <div className="float-end">
-            <button className="btn btn-transparent" style={{ padding: '1px' }} type="button" data-bs-toggle="dropdown">
-                <IoEllipsisVertical className="fs-4" />
-            </button>
-            <ul className="dropdown-menu">
-                <li>
-                    <Link id="wd-edit-items-btn" className="dropdown-item" to={`/Kanbas/Courses/${quiz.course}/Quizzes/editor`}>
-                      Edit
-                    </Link>
-                </li>
-                <li>
-                    <Link id="wd-delete-item-button" className="dropdown-item" onClick={() => deleteQuiz(quizId)}
-                     to={`/Kanbas/Courses/${quiz.course}/Quizzes`}>
-                      Delete
-                    </Link>
-                </li>
-                <li>
-                    <button id="wd-publish-item-button" className="dropdown-item" onClick={handlePublishToggle}>
-                        {quiz.published ? 'Unpublish' : 'Publish'}
-                    </button>
-                </li>
-            </ul>
+            <FaPlus/>
+            <IoEllipsisVertical className="fs-4"/>
         </div>
     );
 }

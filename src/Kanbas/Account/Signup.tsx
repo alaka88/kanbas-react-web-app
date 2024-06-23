@@ -6,7 +6,11 @@ import { setCurrentUser } from "./reducer";
 export default function Signup() {
   const [error, setError] = useState("");
   const dispatch = useDispatch();
-  const [user, setUser] = useState<any>({});
+  const [user, setUser] = useState<any>({
+    username: "",
+    password: "",
+    role: "FACULTY"
+});
   const navigate = useNavigate();
   const signup = async () => {
     try {
@@ -25,6 +29,11 @@ export default function Signup() {
              className="form-control mb-2" placeholder="username" />
       <input value={user.password} onChange={(e) => setUser({ ...user, password: e.target.value })} type="password"
              className="form-control mb-2" placeholder="password" />
+              <select className="form-select" value={user.role}
+                    onChange={(e) => setUser({...user, role: e.target.value})}>
+                <option value="FACULTY">FACULTY</option>
+                <option value="STUDENT">STUDENT</option>
+            </select>
       <button onClick={signup} className="btn btn-primary mb-2"> Sign up </button><br />
       <Link to="/Kanbas/Account/Signin">Sign in</Link>
     </div>

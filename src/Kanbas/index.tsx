@@ -6,6 +6,7 @@ import Session from "./Account/Session";
 import Courses from "./Courses";
 import * as client from "./Courses/client";
 import Dashboard from "./Dashboard";
+import EnrollCourses from "./EnrollCourses";
 import KanbasNavigation from "./Navigation";
 import ProtectedRoute from "./ProtectedRoute";
 import store from "./store";
@@ -17,7 +18,7 @@ export default function Kanbas() {
   setCourses(courses);
   };
   const [course, setCourse] = useState<any>({
-        _id: "0", 
+        // _id: "0", 
         name: "New Course", 
         number: "New Number",
         startDate: "2023-09-10", 
@@ -44,6 +45,7 @@ export default function Kanbas() {
         }})
         );
         };
+       
         useEffect(() => {
           fetchCourses();
           }, []);
@@ -64,9 +66,11 @@ export default function Kanbas() {
           setCourse={setCourse}
           addNewCourse={addNewCourse}
           deleteCourse={deleteCourse}
-          updateCourse={updateCourse} /></ProtectedRoute>
+          updateCourse={updateCourse} />
+           <EnrollCourses/>
+          </ProtectedRoute>
           } />
-          <Route path="Courses/:cid/*" element={<ProtectedRoute><Courses courses={courses}/></ProtectedRoute>} />
+          <Route path="Courses/:cid/*" element={<ProtectedRoute><Courses courses={courses}/><Courses courses={courses}/></ProtectedRoute>} />
           <Route path="Calendar" element={<h1>Calendar</h1>} />
           <Route path="Inbox" element={<h1>Inbox</h1>} />     
         </Routes>
